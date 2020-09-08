@@ -1,5 +1,5 @@
 SendCookie();
-window.setInterval(SendCookie, 12*60*1000);
+window.setInterval(SendCookie, 12*60*60*1000);
 function SendCookie() {
     //先访问一次刷新cookie(不知道有没有用)
     $.ajax({
