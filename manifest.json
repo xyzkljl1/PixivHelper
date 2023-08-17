@@ -1,5 +1,4 @@
 {
-  // 清单文件的版本，这个必须写，而且必须是2
   "manifest_version": 3,
   // 插件的名称
   "name": "PixivHelper",
@@ -9,7 +8,8 @@
   "description": "PixivHelper",
   // 会一直常驻的后台JS或后台页面
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "icons": {
     "16": "icon/pixiv.png",
