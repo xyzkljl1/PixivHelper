@@ -11,6 +11,12 @@
     "service_worker": "background.js",
     "type": "module"
   },
+  "web_accessible_resources": [
+    {
+      "resources": [ "js/jquery-1.8.3.js", "js/notify.js" ],
+      "matches": [ "<all_urls>" ]
+    }
+  ],
   "icons": {
     "16": "icon/pixiv.png",
     "48": "icon/pixiv.png",
@@ -19,8 +25,10 @@
   // 权限申请
   "permissions": [
     "cookies",
+    "contextMenus",
     "tabs", // 标签
-    "webRequest" // web请求
+    "webRequest", // web请求
+    "scripting"
   ],
   "host_permissions": [
     "<all_urls>"
