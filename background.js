@@ -24,7 +24,7 @@ chrome.contextMenus.onClicked.addListener(async function (info, tab) {
     try {
         // .to和.net内容完全一样，但是用nhentai.to获取不到cookie导致后端下载失败
         var url = tab.url;
-        if (url.match("https://www.pixiv.net/.*") || url.match("https://hitomi.la/.*"))
+        if (url.match("https://www.pixiv.net/.*") || url.match("https://hitomi.la/.*") || url.match("https://kemono.su/.*"))
         {
             var res = await fetch('http://127.0.0.1:5678/' + encodeURIComponent(tab.url), {
                 method: 'GET',
