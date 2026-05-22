@@ -24,7 +24,7 @@ chrome.contextMenus.onClicked.addListener(async function (info, tab) {
     try {
         // .to和.net内容完全一样，但是用nhentai.to获取不到cookie导致后端下载失败
         var url = tab.url;
-        if (url.match("https://www.pixiv.net/.*") || url.match("https://hitomi.la/.*") || url.match("https://kemono.su/.*"))
+        if (IsSupportedUrl(url))
         {
             var res = await fetch('http://127.0.0.1:5678/' + encodeURIComponent(tab.url), {
                 method: 'GET',
@@ -45,22 +45,63 @@ SendCookie();
 setInterval(SendCookie, 12*60*60*1000);
 
 function SendCookie() {
+    SendSiteCookie("pixiv", ["https://www.pixiv.net/"]);
+    SendSiteCookie("twitter", ["https://twitter.com/", "https://x.com/"]);
+}
+
+function IsSupportedUrl(url) {
+    return url.match("https://www.pixiv.net/.*")
+        || url.match("https://hitomi.la/.*")
+        || url.match("https://kemono.su/.*")
+        || url.match("https://x.com/.*")
+        || url.match("https://twitter.com/.*");
+}
+
+async function SendSiteCookie(site, urls) {
     //先访问一次刷新cookie(不知道有没有用)
-    fetch('https://www.pixiv.net/', {
-        method: 'HEAD',
-        headers: { 'Cache-Control': 'no-cache' }
-    }).then(_r => {
-        chrome.cookies.getAll({ "url": "https://www.pixiv.net/" }, function (cookies) {
-            var ret = "";
-            for (let cookie of cookies)
-                ret += cookie.name + "=" + cookie.value + "; ";
-            fetch('http://127.0.0.1:5678/', {
-                method: 'POST',
-                body: ret,
+    for (let url of urls) {
+        try {
+            await fetch(url, {
+                method: 'HEAD',
                 headers: { 'Cache-Control': 'no-cache' }
-            }).then(result => {
-                console.log("Send Success\n", ret);
             });
+        }
+        catch (_) { }
+    }
+
+    var cookieMap = new Map();
+    for (let url of urls) {
+        var cookies = await GetCookies(url);
+        for (let cookie of cookies) {
+            if (cookie.name)
+                cookieMap.set(cookie.name, cookie.name + "=" + cookie.value);
+        }
+    }
+
+    var ret = Array.from(cookieMap.values()).join("; ");
+    if (ret.length == 0)
+        return;
+
+    fetch('http://127.0.0.1:5678/', {
+        method: 'POST',
+        body: JSON.stringify({
+            site: site,
+            cookie: ret,
+            userAgent: navigator.userAgent
+        }),
+        headers: {
+            'Cache-Control': 'no-cache',
+            'Content-Type': 'application/json'
+        }
+    }).then(result => {
+        console.log("Send " + site + " cookie " + (result.ok ? "Success" : "Fail"));
+    });
+}
+
+function GetCookies(url) {
+    return new Promise(resolve => {
+        chrome.cookies.getAll({ "url": url }, function (cookies) {
+            resolve(cookies);
         });
     });
 }

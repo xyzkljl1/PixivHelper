@@ -1,12 +1,8 @@
 {
   "manifest_version": 3,
-  // 插件的名称
   "name": "PixivHelper",
-  // 插件的版本
-  "version": "1.0.1",
-  // 插件描述
-  "description": "PixivHelper",
-  // 会一直常驻的后台JS或后台页面
+  "version": "1.0.2",
+  "description": "Send supported site URLs and cookies to the local PictureSpider listener.",
   "background": {
     "service_worker": "background.js",
     "type": "module"
@@ -22,15 +18,17 @@
     "48": "icon/pixiv.png",
     "128": "icon/pixiv.png"
   },
-  // 权限申请
   "permissions": [
     "cookies",
     "contextMenus",
-    "tabs", // 标签
-    "webRequest", // web请求
     "scripting"
   ],
   "host_permissions": [
-    "<all_urls>"
+    "http://127.0.0.1:5678/*",
+    "https://www.pixiv.net/*",
+    "https://hitomi.la/*",
+    "https://kemono.su/*",
+    "https://twitter.com/*",
+    "https://x.com/*"
   ]
 }
