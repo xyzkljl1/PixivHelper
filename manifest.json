@@ -24,11 +24,6 @@
     "scripting"
   ],
   "host_permissions": [
-    "http://127.0.0.1:5678/*",
-    "https://www.pixiv.net/*",
-    "https://hitomi.la/*",
-    "https://kemono.su/*",
-    "https://twitter.com/*",
-    "https://x.com/*"
+    "<all_urls>"
   ]
 }
