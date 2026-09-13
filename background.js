@@ -53,6 +53,7 @@ function IsSupportedUrl(url) {
     return url.match("https://www.pixiv.net/.*")
         || url.match("https://hitomi.la/.*")
         || url.match("https://kemono.su/.*")
+        || url.match("^https://pawchive\\.pw/.*")
         || url.match("https://www.manhuagui.com/comic/.*")
         || url.match("https://m.manhuagui.com/comic/.*")
         || url.match("https://x.com/.*")
